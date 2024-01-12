@@ -1,3 +1,4 @@
+import random
 
 
 def get_all_words():
@@ -14,7 +15,7 @@ def get_countries_and_capitals():
     countries = []
     capitals = []
     for item in all_words:
-        item_list = "".join(item.split()).split("|")
+        item_list = [h.strip() for h in item.split("|")]
         countries.append(item_list[0])
         capitals.append(item_list[1])
     return countries, capitals
@@ -45,6 +46,66 @@ def get_words_by_difficulty_level(difficulty, countries, capitals):
         return countries + capitals
 
 
+def get_random_word(word_list):
+    return random.choice(word_list)
+
+
+def display_word(word, found_list):
+    updated_word = []
+    for letter in word:
+        if letter.lower() in found_list:
+            updated_word.append(letter)
+        else:
+            updated_word.append("_")
+    print("".join(updated_word))
+
+
+def word_fully_match(actual_word, letter_set):
+    for aw in actual_word:
+        if aw.lower() not in letter_set:
+            return False
+    return True
+
+
+def try_to_guess(word_to_guess, found_letters, incorrect_letters):
+    print("YOUR WORD")
+    display_word(word_to_guess, found_letters)
+    # letter = input("Type a letter - ")
+
+    while not word_fully_match(word_to_guess, found_letters):
+        letter = input("Type a letter - ")
+        if letter == "quit":
+            exit()
+
+        if len(letter) > 1:
+            print("Please write a letter")
+            break
+
+        if letter in word_to_guess:
+            if letter in found_letters:
+                print(f"You found {letter}! Try another letter - ")
+            else:
+                found_letters.add(letter.lower())
+        elif letter.isnumeric():
+            print(f"Wrong type! Please provide a letter")
+        else:
+            print(f"Wrong guess! Previous wrong letters are:")
+            incorrect_letters.add(letter.lower())
+            print(' '.join(incorrect_letters))
+
+        display_word(word_to_guess, found_letters)
+
+    print("YOU WON THE GAME!! :)")
+    display_word(word_to_guess, found_letters)
+
+    # for letter
+    # while letter in found_letters or letter in incorrect_letters:
+    #     if letter in found_letters:
+    #         letter = input(f"You found {letter}! Try another letter")
+    #     if letter in incorrect_letters:
+    #         letter = input(f"You found {letter}! Try another letter")
+
+
 
 
 # PART 1
@@ -55,8 +116,8 @@ def get_words_by_difficulty_level(difficulty, countries, capitals):
 # STEP 2
 # based on the chosen difficulty level, set the values 
 # for the player's lives
-word_to_guess = "Cairo" # sample data, normally the word should be chosen from the countries-and-capitals.txt
-lives = 5 # sample data, normally the lives should be chosen based on the difficulty
+# sample data, normally the word should be chosen from the countries-and-capitals.txt
+# sample data, normally the lives should be chosen based on the difficulty
 
 
 # STEP 3
@@ -66,7 +127,7 @@ lives = 5 # sample data, normally the lives should be chosen based on the diffic
 
 # STEP 4
 # ask the user to type a letter
-# here you should validate if the typed letter is the word 
+# here you should validate if the typed letter is the word
 # "quit", "Quit", "QUit", "QUIt", "QUIT", "QuIT"... you get the idea :)
 # HINT: use the upper() or lower() built-in Python functions
 
@@ -101,10 +162,17 @@ already_tried_letters = [] # this list will contain all the tried letters
 
 
 def main():
+    revealed_letters = set()
+    wrong_letters = set()
+
     countries, capitals = get_countries_and_capitals()
+
     selected_difficulty = set_the_difficulty()
     words_by_level = get_words_by_difficulty_level(selected_difficulty, countries, capitals)
-    print(words_by_level)
+    word_to_guess = get_random_word(words_by_level)
+    print(word_to_guess)
+    try_to_guess(word_to_guess, revealed_letters, wrong_letters)
+    # display_word(word_to_guess)
 
 
 if __name__ == "__main__":
