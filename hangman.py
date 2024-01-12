@@ -1,5 +1,4 @@
 import random
-import hangman_pics
 
 
 def get_all_words():
@@ -97,7 +96,7 @@ def try_to_guess(word_to_guess, found_letters, incorrect_letters, lives):
                 print(f"You found {letter}! Try another letter - ")
             else:
                 found_letters.add(letter.lower())
-        elif letter.isnumeric():
+        elif not letter.isalpha():
             print("Wrong type! Please provide a letter")
         else:
             if letter.lower() in incorrect_letters:
