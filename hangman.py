@@ -1,4 +1,5 @@
 import random
+import hangman_pics
 
 
 def get_all_words():
@@ -120,6 +121,16 @@ def try_to_guess(word_to_guess, found_letters, incorrect_letters, lives):
 
 
 def main():
+    print(r"""
+ _                                             
+| |                                            
+| |__   __ _ _ __   __ _ _ __ ___   __ _ _ __  
+| '_ \ / _` | '_ \ / _` | '_ ` _ \ / _` | '_ \ 
+| | | | (_| | | | | (_| | | | | | | (_| | | | |
+|_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|
+                    __/ |                      
+                   |___/      
+    """)
     revealed_letters = set()
     wrong_letters = set()
 
